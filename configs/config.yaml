@@ -1,0 +1,96 @@
+# Training configuration for the Diabetes Risk Assistant.
+# src/train.py reads everything from here; nothing is hardcoded in the script.
+
+data:
+  path: data/diabetes.csv
+  description: "Pima Indians Diabetes (UCI / Kaggle), 768 rows, 8 features, binary target"
+  target: Outcome
+  test_size: 0.2
+  random_state: 42
+  # Zero is a physiologically impossible value for these columns and encodes "missing".
+  zero_as_missing:
+    - Glucose
+    - BloodPressure
+    - SkinThickness
+    - Insulin
+    - BMI
+
+preprocessing:
+  imputation: median      # median | mean
+  scaler: standard        # standard | minmax | none
+  bmi_category: true      # add ordinal BMI category feature (under/normal/over/obese)
+
+mlflow:
+  tracking_uri: sqlite:///mlflow.db   # relative paths resolve against the repo root
+  artifact_location: mlruns
+  experiment_name: diabetes-risk
+  registered_model_name: diabetes-risk-classifier
+
+# Model used for a single `python -m src.train` call (defaults to the first experiment).
+default_experiment: xgb_tuned
+
+# Each entry is one logged MLflow run. `python -m src.train --all` trains every one.
+experiments:
+  logreg_baseline:
+    model: logistic_regression
+    params:
+      C: 1.0
+      max_iter: 1000
+      class_weight: null
+
+  logreg_balanced:
+    model: logistic_regression
+    params:
+      C: 0.5
+      max_iter: 1000
+      class_weight: balanced
+
+  rf_default:
+    model: random_forest
+    params:
+      n_estimators: 300
+      max_depth: null
+      min_samples_leaf: 1
+      class_weight: null
+
+  rf_regularized:
+    model: random_forest
+    params:
+      n_estimators: 500
+      max_depth: 6
+      min_samples_leaf: 4
+      class_weight: balanced
+
+  gb_default:
+    model: gradient_boosting
+    params:
+      n_estimators: 200
+      learning_rate: 0.05
+      max_depth: 3
+      subsample: 0.9
+
+  xgb_tuned:
+    model: xgboost
+    params:
+      n_estimators: 400
+      learning_rate: 0.03
+      max_depth: 3
+      subsample: 0.8
+      colsample_bytree: 0.8
+      min_child_weight: 3
+      reg_lambda: 2.0
+
+  mlp:
+    model: mlp
+    params:
+      hidden_layer_sizes: [32, 16]
+      alpha: 0.001
+      learning_rate_init: 0.001
+      max_iter: 2000
+      early_stopping: true
+
+# Metric used by scripts/compare_runs.py to rank runs and pick the production model.
+selection:
+  primary_metric: roc_auc
+  secondary_metric: f1
+  output_path: models/best_model.joblib

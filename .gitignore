@@ -1,0 +1,30 @@
+# Secrets
+.env
+
+# Data and model artifacts are never committed (see README: scripts/get_data.py, src/train.py)
+data/*
+!data/.gitkeep
+models/*
+!models/.gitkeep
+
+# MLflow tracking store and artifacts
+mlruns/
+mlartifacts/
+mlflow.db
+
+# Python
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.ipynb_checkpoints/
+
+# OS / editors
+.DS_Store
+.vscode/
+.idea/
+
+# Local tooling
+.claude/
