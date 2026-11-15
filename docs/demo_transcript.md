@@ -8,7 +8,7 @@ Generated 2026-11-15 by `python scripts/demo.py` in **offline rule-based** mode.
 
 **Assistant:** Based on the information you provided, the model estimates a **75% probability** of diabetes, which it classifies as **elevated risk** (prediction: positive).
 
-Key factors: your plasma glucose (mg/dL) of 148 raises the estimate by about 15 points versus a typical value of 117; your age (years) of 35 raises the estimate by about 1 points versus a typical value of 29.
+Key factors: your plasma glucose (mg/dL) of 148 raises the estimate by about 15 points versus a typical value of 117; your age (years) of 35 raises the estimate by about 1 point versus a typical value of 29.
 
 Your BMI falls in the 'obese' category.
 

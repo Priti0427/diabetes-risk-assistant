@@ -365,9 +365,11 @@ def template_response(parsed: ParsedInput, pred: Prediction) -> str:
         bits = []
         for c in drivers:
             direction = "raises" if c["contribution"] > 0 else "lowers"
+            points = round(abs(c["contribution"]) * 100)
+            unit = "point" if points == 1 else "points"
             bits.append(
                 f"your {_describe(c['feature'])} of {c['value']:g} {direction} the estimate by about "
-                f"{abs(c['contribution']) * 100:.0f} points versus a typical value of {c['typical_value']:g}"
+                f"{points} {unit} versus a typical value of {c['typical_value']:g}"
             )
         lines.append("Key factors: " + "; ".join(bits) + ".")
     if "BMI" in parsed.features:
