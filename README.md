@@ -14,7 +14,7 @@ with an **LLM-powered natural-language interface**, tracked with **MLflow**, cov
 
 ## 1. Project description
 
-**What it does.** A user describes their health measurements in plain English. The system
+**What it does.** A user describes their health measurements in simple terms. The system
 extracts the model's input features from the text, runs a trained classifier, and replies
 with the predicted probability of type 2 diabetes, the factors that drove it, and the caveats
 that apply.
